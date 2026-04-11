@@ -1,0 +1,177 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Space+Mono:wght@400;700&family=Outfit:wght@200;300;400;500&display=swap');
+
+:root {
+  --void: #03020a;
+  --deep: #070514;
+  --nebula-1: #0d0a1f;
+  --star-gold: #f5d478;
+  --star-white: #eef0ff;
+  --nebula-blue: #4a8fe8;
+  --nebula-violet: #9b5de5;
+  --nebula-pink: #f15bb5;
+  --nebula-cyan: #00bbf9;
+  --nebula-amber: #fee440;
+  --text-primary: #eef0ff;
+  --text-muted: #8b8fad;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--void);
+  color: var(--text-primary);
+  font-family: 'Outfit', sans-serif;
+  font-weight: 300;
+  overflow-x: hidden;
+  cursor: none;
+  min-height: 100vh;
+}
+
+/* ── Cursor ── */
+#cursor {
+  position: fixed; top: 0; left: 0; z-index: 9999;
+  width: 10px; height: 10px; border-radius: 50%;
+  background: var(--nebula-cyan);
+  box-shadow: 0 0 12px var(--nebula-cyan), 0 0 30px var(--nebula-cyan);
+  pointer-events: none; transform: translate(-50%,-50%);
+  transition: transform 0.08s ease;
+}
+#cursor-trail {
+  position: fixed; top: 0; left: 0; z-index: 9998;
+  width: 32px; height: 32px; border-radius: 50%;
+  border: 1px solid rgba(0,187,249,0.4);
+  pointer-events: none; transform: translate(-50%,-50%);
+  transition: transform 0.16s ease, width 0.2s, height 0.2s;
+}
+
+/* ── Starfield ── */
+#starfield {
+  position: fixed; inset: 0; z-index: 0; pointer-events: none;
+}
+
+/* ── Page wrapper ── */
+.page-wrapper { position: relative; z-index: 1; }
+
+/* ── NAV ── */
+nav {
+  position: fixed; top: 0; width: 100%; z-index: 100;
+  padding: 1.2rem 5rem;
+  display: flex; justify-content: space-between; align-items: center;
+  background: linear-gradient(180deg, rgba(3,2,10,0.95) 0%, rgba(3,2,10,0.7) 100%);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+}
+.nav-logo {
+  font-family: 'Cormorant Garamond', serif; font-size: 1.6rem; font-weight: 600;
+  letter-spacing: 0.04em; color: var(--star-white); text-decoration: none;
+}
+.nav-logo span { color: var(--nebula-cyan); }
+.nav-links { display: flex; gap: 0.2rem; list-style: none; align-items: center; }
+.nav-links a {
+  font-family: 'Space Mono', monospace; font-size: 0.68rem;
+  letter-spacing: 0.14em; text-transform: uppercase;
+  text-decoration: none; color: var(--text-muted);
+  padding: 0.5rem 1rem; position: relative;
+  transition: color 0.3s;
+}
+.nav-links a::after {
+  content: ''; position: absolute; bottom: 0; left: 50%; right: 50%;
+  height: 1px; background: var(--nebula-cyan);
+  box-shadow: 0 0 6px var(--nebula-cyan);
+  transition: left 0.3s, right 0.3s;
+}
+.nav-links a:hover, .nav-links a.active { color: var(--star-white); }
+.nav-links a:hover::after, .nav-links a.active::after { left: 1rem; right: 1rem; }
+.nav-links a.active { color: var(--nebula-cyan); }
+
+/* ── Section label ── */
+.section-label {
+  font-family: 'Space Mono', monospace; font-size: 0.68rem;
+  letter-spacing: 0.22em; color: var(--nebula-violet);
+  text-transform: uppercase; display: flex; align-items: center; gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+.section-label::before {
+  content: ''; width: 28px; height: 1px;
+  background: var(--nebula-violet); box-shadow: 0 0 6px var(--nebula-violet);
+}
+
+/* ── Page title ── */
+.page-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(3rem, 6vw, 5.5rem);
+  font-weight: 300; line-height: 1;
+  color: var(--star-white); margin-bottom: 1.4rem;
+}
+.page-title em { font-style: italic; color: var(--nebula-cyan); }
+
+/* ── Reveal ── */
+.reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.75s, transform 0.75s; }
+.reveal.visible { opacity: 1; transform: none; }
+
+/* ── Buttons ── */
+.btn-primary {
+  display: inline-flex; align-items: center; gap: 0.6rem;
+  padding: 0.8rem 1.9rem;
+  border: 1px solid var(--nebula-cyan); color: var(--nebula-cyan);
+  background: transparent; cursor: none;
+  font-family: 'Space Mono', monospace; font-size: 0.7rem;
+  letter-spacing: 0.14em; text-transform: uppercase;
+  text-decoration: none; transition: background 0.3s, color 0.3s, box-shadow 0.3s;
+  position: relative; overflow: hidden;
+}
+.btn-primary::before {
+  content: ''; position: absolute; inset: 0; background: var(--nebula-cyan);
+  transform: scaleX(0); transform-origin: left; transition: transform 0.3s; z-index: -1;
+}
+.btn-primary:hover { color: var(--void); box-shadow: 0 0 28px rgba(0,187,249,0.4); }
+.btn-primary:hover::before { transform: scaleX(1); }
+
+.btn-ghost {
+  display: inline-flex; align-items: center; gap: 0.6rem;
+  padding: 0.8rem 1.9rem;
+  border: 1px solid rgba(255,255,255,0.12); color: var(--text-muted);
+  background: transparent; cursor: none;
+  font-family: 'Space Mono', monospace; font-size: 0.7rem;
+  letter-spacing: 0.14em; text-transform: uppercase;
+  text-decoration: none; transition: border-color 0.3s, color 0.3s;
+}
+.btn-ghost:hover { border-color: var(--nebula-violet); color: var(--nebula-violet); }
+
+/* ── Page entry animation ── */
+@keyframes pageIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: none; }
+}
+.page-enter { animation: pageIn 0.7s ease forwards; }
+
+/* ── Tags ── */
+.tag {
+  font-size: 0.72rem; padding: 0.28rem 0.7rem;
+  border: 1px solid rgba(255,255,255,0.1); color: var(--text-muted);
+  background: rgba(255,255,255,0.03); letter-spacing: 0.04em;
+  transition: all 0.3s;
+}
+
+/* ── Footer ── */
+footer {
+  padding: 2.5rem 5rem;
+  border-top: 1px solid rgba(255,255,255,0.05);
+  display: flex; justify-content: space-between; align-items: center;
+  font-family: 'Space Mono', monospace; font-size: 0.64rem;
+  letter-spacing: 0.1em; color: var(--text-muted);
+  position: relative; z-index: 1; margin-top: auto;
+}
+footer .highlight { color: var(--nebula-cyan); }
+
+/* ── Scrollbar ── */
+::-webkit-scrollbar { width: 3px; }
+::-webkit-scrollbar-track { background: var(--void); }
+::-webkit-scrollbar-thumb { background: var(--nebula-violet); }
+
+@media (max-width: 900px) {
+  nav { padding: 1rem 1.5rem; }
+  .nav-links a { padding: 0.4rem 0.6rem; font-size: 0.6rem; }
+  footer { padding: 1.5rem; flex-direction: column; gap: 0.4rem; text-align: center; }
+}

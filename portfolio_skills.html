@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Skills · Thanushree</title>
+<link rel="stylesheet" href="style.css">
+<style>
+.page-header {
+  padding: 10rem 5rem 4rem;
+}
+.skill-universe {
+  padding: 0 5rem 6rem;
+}
+
+/* Category blocks */
+.cat-section { margin-bottom: 4rem; }
+.cat-header {
+  display: flex; align-items: center; gap: 1.5rem;
+  margin-bottom: 1.8rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+.cat-icon { font-size: 1.4rem; }
+.cat-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.6rem; font-weight: 400; color: var(--star-white);
+}
+.cat-count {
+  font-family: 'Space Mono', monospace; font-size: 0.62rem;
+  letter-spacing: 0.14em; color: var(--text-muted);
+  margin-left: auto;
+}
+
+/* Skill items */
+.skill-list { display: flex; flex-direction: column; gap: 0.9rem; }
+.skill-row {
+  display: grid; grid-template-columns: 200px 1fr auto;
+  align-items: center; gap: 1.5rem;
+  padding: 0.9rem 0;
+}
+.skill-name {
+  font-size: 0.88rem; color: var(--text-primary); font-weight: 400;
+  letter-spacing: 0.03em;
+}
+.skill-bar-wrap {
+  height: 3px;
+  background: rgba(255,255,255,0.06);
+  border-radius: 99px;
+  overflow: hidden;
+  position: relative;
+}
+.skill-bar {
+  height: 100%; border-radius: 99px;
+  width: 0%; transition: width 1.2s cubic-bezier(0.4,0,0.2,1);
+  position: relative;
+}
+.skill-bar::after {
+  content: ''; position: absolute;
+  right: 0; top: 50%;
+  transform: translate(50%, -50%);
+  width: 7px; height: 7px; border-radius: 50%;
+  background: inherit;
+  box-shadow: 0 0 8px 2px currentColor;
+}
+.skill-bar.cyan  { background: var(--nebula-cyan); }
+.skill-bar.violet { background: var(--nebula-violet); }
+.skill-bar.pink   { background: var(--nebula-pink); }
+.skill-bar.amber  { background: var(--nebula-amber); }
+.skill-bar.blue   { background: var(--nebula-blue); }
+
+.skill-pct {
+  font-family: 'Space Mono', monospace; font-size: 0.68rem;
+  color: var(--text-muted); min-width: 36px; text-align: right;
+}
+
+/* Tool cloud */
+.tools-section { padding: 0 5rem 4rem; }
+.tools-section h2 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 2.2rem; font-weight: 300; color: var(--star-white); margin-bottom: 2rem;
+}
+.tools-section h2 em { font-style: italic; color: var(--nebula-amber); }
+
+.tools-cloud { display: flex; flex-wrap: wrap; gap: 0.65rem; }
+.tool-pill {
+  font-family: 'Space Mono', monospace; font-size: 0.68rem;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  padding: 0.5rem 1.1rem;
+  border: 1px solid rgba(255,255,255,0.08);
+  color: var(--text-muted);
+  background: rgba(255,255,255,0.02);
+  transition: all 0.3s; cursor: default;
+}
+.tool-pill:hover { border-color: var(--nebula-cyan); color: var(--nebula-cyan); background: rgba(0,187,249,0.05); }
+
+/* Certs */
+.certs-section { padding: 0 5rem 6rem; }
+.certs-section h2 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 2.2rem; font-weight: 300; color: var(--star-white); margin-bottom: 2rem;
+}
+.certs-section h2 em { font-style: italic; color: var(--nebula-cyan); }
+.certs-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px,1fr)); gap: 1rem; }
+.cert-card {
+  border: 1px solid rgba(255,255,255,0.06);
+  background: rgba(255,255,255,0.02);
+  padding: 1.5rem;
+  transition: border-color 0.3s, background 0.3s;
+  position: relative; overflow: hidden;
+}
+.cert-card::before {
+  content: ''; position: absolute; left: 0; top: 0; bottom: 0;
+  width: 2px; background: var(--nebula-cyan);
+  transform: scaleY(0); transform-origin: bottom;
+  transition: transform 0.35s;
+}
+.cert-card:hover::before { transform: scaleY(1); }
+.cert-card:hover { background: rgba(0,187,249,0.03); }
+.cert-issuer {
+  font-family: 'Space Mono', monospace; font-size: 0.62rem;
+  letter-spacing: 0.14em; color: var(--nebula-cyan);
+  text-transform: uppercase; margin-bottom: 0.5rem;
+}
+.cert-name { font-size: 0.92rem; color: var(--star-white); font-weight: 400; margin-bottom: 0.3rem; }
+.cert-year { font-size: 0.75rem; color: var(--text-muted); }
+
+@media(max-width:900px){
+  .page-header,.skill-universe,.tools-section,.certs-section{padding-left:2rem;padding-right:2rem;}
+  .skill-row{grid-template-columns:140px 1fr auto;gap:0.8rem;}
+}
+</style>
+</head>
+<body>
+<div id="cursor"></div><div id="cursor-trail"></div>
+<canvas id="starfield"></canvas>
+
+<nav>
+  <a href="index.html" class="nav-logo">T<span>.</span></a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="skills.html">Skills</a></li>
+    <li><a href="projects.html">Projects</a></li>
+    <li><a href="contact.html">Contact</a></li>
+  </ul>
+</nav>
+
+<div class="page-wrapper page-enter">
+  <div class="page-header reveal">
+    <div class="section-label">Skill Constellation</div>
+    <h1 class="page-title">What I <em>orbit</em> around</h1>
+    <p style="font-size:1rem;color:var(--text-muted);max-width:520px;line-height:1.9;margin-top:0.5rem;">
+      Technologies and tools I've developed proficiency in through coursework, projects, and relentless curiosity.
+    </p>
+  </div>
+
+  <div class="skill-universe">
+    <!-- ML -->
+    <div class="cat-section reveal">
+      <div class="cat-header">
+        <span class="cat-icon">🤖</span>
+        <span class="cat-name">Machine Learning</span>
+        <span class="cat-count">5 skills</span>
+      </div>
+      <div class="skill-list">
+        <div class="skill-row"><span class="skill-name">Scikit-learn</span><div class="skill-bar-wrap"><div class="skill-bar cyan" data-w="90"></div></div><span class="skill-pct">90%</span></div>
+        <div class="skill-row"><span class="skill-name">XGBoost / LightGBM</span><div class="skill-bar-wrap"><div class="skill-bar cyan" data-w="82"></div></div><span class="skill-pct">82%</span></div>
+        <div class="skill-row"><span class="skill-name">Feature Engineering</span><div class="skill-bar-wrap"><div class="skill-bar cyan" data-w="85"></div></div><span class="skill-pct">85%</span></div>
+        <div class="skill-row"><span class="skill-name">Model Evaluation</span><div class="skill-bar-wrap"><div class="skill-bar cyan" data-w="88"></div></div><span class="skill-pct">88%</span></div>
+        <div class="skill-row"><span class="skill-name">Time Series Analysis</span><div class="skill-bar-wrap"><div class="skill-bar cyan" data-w="70"></div></div><span class="skill-pct">70%</span></div>
+      </div>
+    </div>
+
+    <!-- DL -->
+    <div class="cat-section reveal">
+      <div class="cat-header">
+        <span class="cat-icon">🧠</span>
+        <span class="cat-name">Deep Learning</span>
+        <span class="cat-count">5 skills</span>
+      </div>
+      <div class="skill-list">
+        <div class="skill-row"><span class="skill-name">PyTorch</span><div class="skill-bar-wrap"><div class="skill-bar violet" data-w="86"></div></div><span class="skill-pct">86%</span></div>
+        <div class="skill-row"><span class="skill-name">TensorFlow / Keras</span><div class="skill-bar-wrap"><div class="skill-bar violet" data-w="83"></div></div><span class="skill-pct">83%</span></div>
+        <div class="skill-row"><span class="skill-name">CNNs & ResNets</span><div class="skill-bar-wrap"><div class="skill-bar violet" data-w="88"></div></div><span class="skill-pct">88%</span></div>
+        <div class="skill-row"><span class="skill-name">Transformer Models</span><div class="skill-bar-wrap"><div class="skill-bar violet" data-w="78"></div></div><span class="skill-pct">78%</span></div>
+        <div class="skill-row"><span class="skill-name">GANs & Diffusion</span><div class="skill-bar-wrap"><div class="skill-bar violet" data-w="62"></div></div><span class="skill-pct">62%</span></div>
+      </div>
+    </div>
+
+    <!-- NLP -->
+    <div class="cat-section reveal">
+      <div class="cat-header">
+        <span class="cat-icon">💬</span>
+        <span class="cat-name">Natural Language Processing</span>
+        <span class="cat-count">4 skills</span>
+      </div>
+      <div class="skill-list">
+        <div class="skill-row"><span class="skill-name">HuggingFace</span><div class="skill-bar-wrap"><div class="skill-bar pink" data-w="80"></div></div><span class="skill-pct">80%</span></div>
+        <div class="skill-row"><span class="skill-name">BERT / RoBERTa</span><div class="skill-bar-wrap"><div class="skill-bar pink" data-w="75"></div></div><span class="skill-pct">75%</span></div>
+        <div class="skill-row"><span class="skill-name">NLTK / SpaCy</span><div class="skill-bar-wrap"><div class="skill-bar pink" data-w="82"></div></div><span class="skill-pct">82%</span></div>
+        <div class="skill-row"><span class="skill-name">Text Classification</span><div class="skill-bar-wrap"><div class="skill-bar pink" data-w="85"></div></div><span class="skill-pct">85%</span></div>
+      </div>
+    </div>
+
+    <!-- CV -->
+    <div class="cat-section reveal">
+      <div class="cat-header">
+        <span class="cat-icon">👁️</span>
+        <span class="cat-name">Computer Vision</span>
+        <span class="cat-count">4 skills</span>
+      </div>
+      <div class="skill-list">
+        <div class="skill-row"><span class="skill-name">OpenCV</span><div class="skill-bar-wrap"><div class="skill-bar amber" data-w="88"></div></div><span class="skill-pct">88%</span></div>
+        <div class="skill-row"><span class="skill-name">YOLOv8 / Detection</span><div class="skill-bar-wrap"><div class="skill-bar amber" data-w="80"></div></div><span class="skill-pct">80%</span></div>
+        <div class="skill-row"><span class="skill-name">Image Segmentation</span><div class="skill-bar-wrap"><div class="skill-bar amber" data-w="74"></div></div><span class="skill-pct">74%</span></div>
+        <div class="skill-row"><span class="skill-name">Data Augmentation</span><div class="skill-bar-wrap"><div class="skill-bar amber" data-w="86"></div></div><span class="skill-pct">86%</span></div>
+      </div>
+    </div>
+
+    <!-- Data -->
+    <div class="cat-section reveal">
+      <div class="cat-header">
+        <span class="cat-icon">📊</span>
+        <span class="cat-name">Data Science & Programming</span>
+        <span class="cat-count">5 skills</span>
+      </div>
+      <div class="skill-list">
+        <div class="skill-row"><span class="skill-name">Python</span><div class="skill-bar-wrap"><div class="skill-bar blue" data-w="92"></div></div><span class="skill-pct">92%</span></div>
+        <div class="skill-row"><span class="skill-name">Pandas / NumPy</span><div class="skill-bar-wrap"><div class="skill-bar blue" data-w="90"></div></div><span class="skill-pct">90%</span></div>
+        <div class="skill-row"><span class="skill-name">SQL</span><div class="skill-bar-wrap"><div class="skill-bar blue" data-w="78"></div></div><span class="skill-pct">78%</span></div>
+        <div class="skill-row"><span class="skill-name">Matplotlib / Seaborn</span><div class="skill-bar-wrap"><div class="skill-bar blue" data-w="85"></div></div><span class="skill-pct">85%</span></div>
+        <div class="skill-row"><span class="skill-name">Tableau (basics)</span><div class="skill-bar-wrap"><div class="skill-bar blue" data-w="60"></div></div><span class="skill-pct">60%</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tools-section">
+    <h2 class="reveal">Tools &amp; <em>Environment</em></h2>
+    <div class="tools-cloud reveal">
+      <span class="tool-pill">Git & GitHub</span>
+      <span class="tool-pill">Docker</span>
+      <span class="tool-pill">Jupyter</span>
+      <span class="tool-pill">Google Colab</span>
+      <span class="tool-pill">VS Code</span>
+      <span class="tool-pill">Linux / Bash</span>
+      <span class="tool-pill">FastAPI</span>
+      <span class="tool-pill">Streamlit</span>
+      <span class="tool-pill">Flask</span>
+      <span class="tool-pill">Weights & Biases</span>
+      <span class="tool-pill">MLflow</span>
+      <span class="tool-pill">AWS (basics)</span>
+      <span class="tool-pill">Kaggle</span>
+      <span class="tool-pill">LaTeX</span>
+    </div>
+  </div>
+
+  <div class="certs-section">
+    <h2 class="reveal">Certifications &amp; <em>Courses</em></h2>
+    <div class="certs-grid">
+      <div class="cert-card reveal">
+        <div class="cert-issuer">Coursera · DeepLearning.AI</div>
+        <div class="cert-name">Deep Learning Specialisation</div>
+        <div class="cert-year">2024</div>
+      </div>
+      <div class="cert-card reveal">
+        <div class="cert-issuer">Google</div>
+        <div class="cert-name">Machine Learning Crash Course</div>
+        <div class="cert-year">2023</div>
+      </div>
+      <div class="cert-card reveal">
+        <div class="cert-issuer">Coursera · Stanford</div>
+        <div class="cert-name">Machine Learning — Andrew Ng</div>
+        <div class="cert-year">2023</div>
+      </div>
+      <div class="cert-card reveal">
+        <div class="cert-issuer">Kaggle</div>
+        <div class="cert-name">Intermediate Machine Learning</div>
+        <div class="cert-year">2024</div>
+      </div>
+      <div class="cert-card reveal">
+        <div class="cert-issuer">NPTEL · IIT Madras</div>
+        <div class="cert-name">Introduction to NLP</div>
+        <div class="cert-year">2024</div>
+      </div>
+      <div class="cert-card reveal">
+        <div class="cert-issuer">HuggingFace</div>
+        <div class="cert-name">NLP with Transformers Course</div>
+        <div class="cert-year">2025</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div>© 2025 Thanushree</div>
+  <div>B.Tech AI &amp; ML · <span class="highlight">Anna University</span></div>
+  <div>Designed in the <span class="highlight">Milky Way</span></div>
+</footer>
+
+<script src="main.js"></script>
+<script>
+/* Animate skill bars on scroll */
+const bars = document.querySelectorAll('.skill-bar');
+const barObs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      const w = e.target.getAttribute('data-w');
+      e.target.style.width = w + '%';
+      barObs.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.3 });
+bars.forEach(b => barObs.observe(b));
+</script>
+</body>
+</html>

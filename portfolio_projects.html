@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Projects · Thanushree</title>
+<link rel="stylesheet" href="style.css">
+<style>
+.page-header { padding: 10rem 5rem 3rem; }
+.filter-bar {
+  padding: 0 5rem 3rem;
+  display: flex; gap: 0.5rem; flex-wrap: wrap;
+}
+.filter-btn {
+  font-family: 'Space Mono', monospace; font-size: 0.66rem;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  padding: 0.5rem 1.1rem;
+  border: 1px solid rgba(255,255,255,0.1); color: var(--text-muted);
+  background: transparent; cursor: none;
+  transition: all 0.3s;
+}
+.filter-btn:hover, .filter-btn.active {
+  border-color: var(--nebula-cyan); color: var(--nebula-cyan);
+  background: rgba(0,187,249,0.06);
+}
+
+/* Projects grid */
+.projects-wrap { padding: 0 5rem 8rem; }
+.projects-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(360px,1fr));
+  gap: 1.5rem;
+}
+.project-card {
+  border: 1px solid rgba(255,255,255,0.07);
+  background: rgba(255,255,255,0.025);
+  padding: 2.4rem 2rem;
+  position: relative; overflow: hidden;
+  transition: transform 0.35s, border-color 0.35s;
+  cursor: none;
+}
+.project-card::before {
+  content: ''; position: absolute; inset: 0; opacity: 0;
+  background: radial-gradient(ellipse at var(--mx,50%) var(--my,50%),
+    rgba(74,143,232,0.1) 0%, transparent 65%);
+  transition: opacity 0.4s; pointer-events: none;
+}
+.project-card:hover { transform: translateY(-6px); border-color: rgba(74,143,232,0.3); }
+.project-card:hover::before { opacity: 1; }
+
+.project-top {
+  display: flex; justify-content: space-between; align-items: flex-start;
+  margin-bottom: 1.4rem;
+}
+.project-num {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 5rem; font-weight: 300; line-height: 1;
+  color: rgba(255,255,255,0.04); letter-spacing: -0.04em;
+  position: absolute; top: 0.8rem; right: 1.2rem;
+  pointer-events: none;
+}
+.project-cat {
+  font-family: 'Space Mono', monospace; font-size: 0.62rem;
+  letter-spacing: 0.16em; text-transform: uppercase;
+  padding: 0.3rem 0.8rem;
+  border: 1px solid rgba(255,255,255,0.1); color: var(--text-muted);
+}
+.project-status {
+  font-family: 'Space Mono', monospace; font-size: 0.6rem;
+  letter-spacing: 0.1em; display: flex; align-items: center; gap: 0.4rem;
+  color: var(--nebula-cyan);
+}
+.status-dot {
+  width: 5px; height: 5px; border-radius: 50%;
+  background: var(--nebula-cyan); box-shadow: 0 0 6px var(--nebula-cyan);
+}
+
+.project-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.7rem; font-weight: 400; color: var(--star-white);
+  line-height: 1.15; margin-bottom: 1rem; position: relative; z-index: 1;
+}
+.project-desc {
+  font-size: 0.87rem; color: var(--text-muted);
+  line-height: 1.85; margin-bottom: 1.5rem;
+}
+.project-stack { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 1.5rem; }
+.stack-tag {
+  font-size: 0.66rem; font-family: 'Space Mono', monospace;
+  letter-spacing: 0.06em; color: var(--nebula-violet);
+  padding: 0.22rem 0.6rem;
+  border: 1px solid rgba(155,93,229,0.25);
+  background: rgba(155,93,229,0.05);
+}
+.project-links { display: flex; gap: 0.8rem; }
+.proj-link {
+  font-family: 'Space Mono', monospace; font-size: 0.62rem;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--text-muted); text-decoration: none;
+  padding: 0.4rem 0.9rem;
+  border: 1px solid rgba(255,255,255,0.08);
+  transition: color 0.3s, border-color 0.3s;
+}
+.proj-link:hover { color: var(--nebula-cyan); border-color: var(--nebula-cyan); }
+
+/* Featured project (full-width) */
+.project-card.featured {
+  grid-column: 1 / -1;
+  padding: 3rem;
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 3rem; align-items: center;
+}
+.featured .project-title { font-size: 2.4rem; }
+.featured-badge {
+  font-family: 'Space Mono', monospace; font-size: 0.6rem;
+  letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--nebula-amber);
+  display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1rem;
+}
+.featured-badge::before {
+  content: '★'; font-size: 0.7rem;
+}
+.feat-visual {
+  position: relative; height: 220px;
+  border: 1px solid rgba(255,255,255,0.06);
+  display: flex; align-items: center; justify-content: center;
+  overflow: hidden;
+  background: radial-gradient(ellipse at 50% 50%, rgba(0,187,249,0.06) 0%, transparent 70%);
+}
+.feat-visual-text {
+  font-family: 'Space Mono', monospace; font-size: 0.6rem;
+  letter-spacing: 0.16em; color: rgba(255,255,255,0.15);
+  text-align: center; line-height: 2;
+}
+.feat-dots { position: absolute; inset: 0; }
+
+/* Hidden state for filter */
+.project-card.hidden { display: none; }
+
+@media(max-width:900px){
+  .page-header,.filter-bar,.projects-wrap{padding-left:2rem;padding-right:2rem;}
+  .project-card.featured{grid-column:auto;grid-template-columns:1fr;}
+  .projects-grid{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+<div id="cursor"></div><div id="cursor-trail"></div>
+<canvas id="starfield"></canvas>
+
+<nav>
+  <a href="index.html" class="nav-logo">T<span>.</span></a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="skills.html">Skills</a></li>
+    <li><a href="projects.html">Projects</a></li>
+    <li><a href="contact.html">Contact</a></li>
+  </ul>
+</nav>
+
+<div class="page-wrapper page-enter">
+  <div class="page-header reveal">
+    <div class="section-label">Mission Logs</div>
+    <h1 class="page-title">Projects &amp; <em>Research</em></h1>
+    <p style="font-size:1rem;color:var(--text-muted);max-width:520px;line-height:1.9;margin-top:0.5rem;">
+      A selection of projects built through coursework, hackathons, and personal curiosity.
+    </p>
+  </div>
+
+  <div class="filter-bar reveal">
+    <button class="filter-btn active" data-filter="all">All</button>
+    <button class="filter-btn" data-filter="vision">Computer Vision</button>
+    <button class="filter-btn" data-filter="nlp">NLP</button>
+    <button class="filter-btn" data-filter="ml">Machine Learning</button>
+    <button class="filter-btn" data-filter="gen">Generative AI</button>
+  </div>
+
+  <div class="projects-wrap">
+    <div class="projects-grid">
+
+      <!-- Featured -->
+      <div class="project-card featured reveal" data-cat="vision">
+        <div>
+          <div class="featured-badge">Featured Project</div>
+          <div class="project-num">01</div>
+          <div class="project-cat">Computer Vision</div>
+          <h2 class="project-title">Crop Disease Detection System</h2>
+          <p class="project-desc">
+            Real-time crop disease detection built for Smart India Hackathon. Uses YOLOv8 fine-tuned on a custom dataset of 12,000+ plant leaf images to classify 15 disease types with 91.3% mAP. Deployed on edge devices for offline field use.
+          </p>
+          <div class="project-stack">
+            <span class="stack-tag">YOLOv8</span><span class="stack-tag">PyTorch</span>
+            <span class="stack-tag">OpenCV</span><span class="stack-tag">ONNX</span>
+            <span class="stack-tag">Raspberry Pi</span>
+          </div>
+          <div class="project-links">
+            <a href="#" class="proj-link">GitHub →</a>
+            <a href="#" class="proj-link">Demo →</a>
+          </div>
+        </div>
+        <div class="feat-visual">
+          <canvas class="feat-dots" id="dotCanvas"></canvas>
+          <div class="feat-visual-text">
+            YOLOv8 · mAP 91.3%<br>
+            15 disease classes<br>
+            Edge deployed
+          </div>
+        </div>
+      </div>
+
+      <!-- Project 2 -->
+      <div class="project-card reveal" data-cat="nlp">
+        <div class="project-num">02</div>
+        <div class="project-top">
+          <span class="project-cat">NLP</span>
+          <span class="project-status"><span class="status-dot"></span>Live</span>
+        </div>
+        <h3 class="project-title">Research Paper Summariser</h3>
+        <p class="project-desc">Extractive + abstractive pipeline using T5 and BERT to condense ML papers into structured summaries. Includes section identification and key-contribution extraction.</p>
+        <div class="project-stack">
+          <span class="stack-tag">HuggingFace</span><span class="stack-tag">T5</span>
+          <span class="stack-tag">FastAPI</span><span class="stack-tag">React</span>
+        </div>
+        <div class="project-links">
+          <a href="#" class="proj-link">GitHub →</a>
+          <a href="#" class="proj-link">Try it →</a>
+        </div>
+      </div>
+
+      <!-- Project 3 -->
+      <div class="project-card reveal" data-cat="ml">
+        <div class="project-num">03</div>
+        <div class="project-top">
+          <span class="project-cat">Machine Learning</span>
+        </div>
+        <h3 class="project-title">Academic Performance Predictor</h3>
+        <p class="project-desc">Ensemble model (XGBoost + Random Forest) predicting student grades from behavioural and academic features. Deployed with a Streamlit dashboard for faculty use.</p>
+        <div class="project-stack">
+          <span class="stack-tag">XGBoost</span><span class="stack-tag">Scikit-learn</span>
+          <span class="stack-tag">Streamlit</span><span class="stack-tag">Pandas</span>
+        </div>
+        <div class="project-links">
+          <a href="#" class="proj-link">GitHub →</a>
+        </div>
+      </div>
+
+      <!-- Project 4 -->
+      <div class="project-card reveal" data-cat="gen">
+        <div class="project-num">04</div>
+        <div class="project-top">
+          <span class="project-cat">Generative AI</span>
+        </div>
+        <h3 class="project-title">Neural Style Transfer App</h3>
+        <p class="project-desc">Applies artistic styles of famous paintings to user-uploaded photos using VGG-19 feature maps and iterative gradient optimisation. Includes 10 preset styles.</p>
+        <div class="project-stack">
+          <span class="stack-tag">TensorFlow</span><span class="stack-tag">VGG-19</span>
+          <span class="stack-tag">Flask</span><span class="stack-tag">PIL</span>
+        </div>
+        <div class="project-links">
+          <a href="#" class="proj-link">GitHub →</a>
+          <a href="#" class="proj-link">Demo →</a>
+        </div>
+      </div>
+
+      <!-- Project 5 -->
+      <div class="project-card reveal" data-cat="vision">
+        <div class="project-num">05</div>
+        <div class="project-top">
+          <span class="project-cat">Computer Vision</span>
+        </div>
+        <h3 class="project-title">Sign Language Interpreter</h3>
+        <p class="project-desc">MediaPipe-based hand landmark detection combined with an LSTM classifier to recognise 26 ASL alphabet signs in real time through a webcam feed.</p>
+        <div class="project-stack">
+          <span class="stack-tag">MediaPipe</span><span class="stack-tag">LSTM</span>
+          <span class="stack-tag">OpenCV</span><span class="stack-tag">Keras</span>
+        </div>
+        <div class="project-links">
+          <a href="#" class="proj-link">GitHub →</a>
+        </div>
+      </div>
+
+      <!-- Project 6 -->
+      <div class="project-card reveal" data-cat="nlp">
+        <div class="project-num">06</div>
+        <div class="project-top">
+          <span class="project-cat">NLP</span>
+        </div>
+        <h3 class="project-title">Tamil Sentiment Analyser</h3>
+        <p class="project-desc">Fine-tuned mBERT on a Tamil social media dataset for 3-class sentiment classification (positive/negative/neutral), achieving 84.2% accuracy on test set.</p>
+        <div class="project-stack">
+          <span class="stack-tag">mBERT</span><span class="stack-tag">HuggingFace</span>
+          <span class="stack-tag">PyTorch</span><span class="stack-tag">NLTK</span>
+        </div>
+        <div class="project-links">
+          <a href="#" class="proj-link">GitHub →</a>
+          <a href="#" class="proj-link">Paper →</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div>© 2025 Thanushree</div>
+  <div>B.Tech AI &amp; ML · <span class="highlight">Anna University</span></div>
+  <div>Designed in the <span class="highlight">Milky Way</span></div>
+</footer>
+
+<script src="main.js"></script>
+<script>
+/* Filter */
+document.querySelectorAll('.filter-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const f = btn.dataset.filter;
+    document.querySelectorAll('.project-card').forEach(card => {
+      if (f === 'all' || card.dataset.cat === f) {
+        card.classList.remove('hidden');
+      } else {
+        card.classList.add('hidden');
+      }
+    });
+  });
+});
+
+/* Mouse glow */
+document.querySelectorAll('.project-card').forEach(card => {
+  card.addEventListener('mousemove', e => {
+    const r = card.getBoundingClientRect();
+    card.style.setProperty('--mx', ((e.clientX-r.left)/r.width*100)+'%');
+    card.style.setProperty('--my', ((e.clientY-r.top)/r.height*100)+'%');
+  });
+});
+
+/* Animated dots on featured card */
+(function() {
+  const c = document.getElementById('dotCanvas');
+  if (!c) return;
+  const ctx = c.getContext('2d');
+  function resize() { c.width=c.offsetWidth; c.height=c.offsetHeight; }
+  resize(); window.addEventListener('resize', resize);
+  const dots = Array.from({length:40}, () => ({
+    x: Math.random()*c.width, y: Math.random()*c.height,
+    r: Math.random()*2+0.5, a: Math.random()*0.5+0.1,
+    vx: (Math.random()-0.5)*0.4, vy: (Math.random()-0.5)*0.4,
+    tw: Math.random()*Math.PI*2, tws: Math.random()*0.02+0.005
+  }));
+  function draw() {
+    ctx.clearRect(0,0,c.width,c.height);
+    dots.forEach(d => {
+      d.x += d.vx; d.y += d.vy; d.tw += d.tws;
+      if (d.x<0) d.x=c.width; if (d.x>c.width) d.x=0;
+      if (d.y<0) d.y=c.height; if (d.y>c.height) d.y=0;
+      const a = d.a*(0.5+0.5*Math.sin(d.tw));
+      ctx.beginPath(); ctx.arc(d.x,d.y,d.r,0,Math.PI*2);
+      ctx.fillStyle=`rgba(0,187,249,${a})`; ctx.fill();
+    });
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+</script>
+</body>
+</html>
