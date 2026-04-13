@@ -26,16 +26,26 @@
   --glow: rgba(91,15,214,0.3);
 }
 .theme-reading {
-  --bg-primary: #1c1510;
-  --bg-secondary: #251e16;
-  --bg-card: rgba(30, 24, 18, 0.95);
-  --text-primary: #f0e6d0;
-  --text-secondary: #a08060;
-  --text-accent: #d4a56a;
-  --border: rgba(212,165,106,0.15);
-  --glow: rgba(212,165,106,0.3);
-  --reading-filter: sepia(0.3) brightness(0.9);
+  --bg-primary: #fdf6e3;
+  --bg-secondary: #f5ead0;
+  --bg-card: rgba(255, 248, 230, 0.92);
+  --text-primary: #3c2f1a;
+  --text-secondary: #7a5c38;
+  --text-accent: #b5600a;
+  --border: rgba(181, 96, 10, 0.18);
+  --glow: rgba(181, 96, 10, 0.25);
+  --reading-filter: sepia(0.12) brightness(1.02);
 }
+
+.theme-reading .glass-card {
+  background: rgba(255, 248, 230, 0.92);
+  border-color: rgba(181, 96, 10, 0.15);
+}
+.theme-reading .glass-card:hover {
+  border-color: rgba(181, 96, 10, 0.45);
+  box-shadow: 0 8px 40px rgba(0,0,0,0.12), 0 0 30px rgba(181,96,10,0.12);
+}
+.theme-reading #starfield { opacity: 0.08; }
 
 html { scroll-behavior: smooth; }
 
